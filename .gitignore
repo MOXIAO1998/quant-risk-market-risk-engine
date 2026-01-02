@@ -179,3 +179,26 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# =========================
+# Quant Risk project specific
+# =========================
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+
+# Data (DO NOT COMMIT RAW DATA)
+data/
+*.csv
+*.parquet
+*.xlsx
+*.h5
+*.hdf5
+
+# Notebook outputs / figures
+notebooks/output/
+figures/
