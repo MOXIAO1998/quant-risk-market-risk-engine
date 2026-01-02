@@ -50,6 +50,14 @@ def historical_var(
     out.name = f"HS_VaR_{alpha:.4f}"
     return out
 
+
+def rolling_mean_std(returns: pd.Series, window: int, *, ddof: int = 1) -> tuple[pd.Series, pd.Series]:
+    r_shift = returns.shift(1)
+    mu = r_shift.rolling(window=window, min_periods=window).mean()
+    sigma = r_shift.rolling(window=window, min_periods=window).std(ddof=ddof)
+    return mu, sigma
+
+
 def gaussian_var(
     returns: pd.Series,
     alpha: float = 0.95,
@@ -66,9 +74,10 @@ def gaussian_var(
     if ddof not in (0, 1):
         raise ValueError("ddof must be 0 or 1")
 
-    r_shift = returns.shift(1)
-    mu = r_shift.rolling(window=window, min_periods=window).mean()
-    sigma = r_shift.rolling(window=window, min_periods=window).std(ddof=ddof)
+    # r_shift = returns.shift(1)
+    # mu = r_shift.rolling(window=window, min_periods=window).mean()
+    # sigma = r_shift.rolling(window=window, min_periods=window).std(ddof=ddof)
+    mu, sigma = rolling_mean_std(returns, window=window, ddof=ddof)
 
     z = NormalDist().inv_cdf(1.0 - alpha)  # negative for alpha>0.5
     q = mu + sigma * z
